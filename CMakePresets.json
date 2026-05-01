@@ -10,10 +10,7 @@
       "name": "base",
       "hidden": true,
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_CXX_STANDARD": "20"
-      }
+      "binaryDir": "${sourceDir}/build/${presetName}"
     },
     {
       "name": "debug",

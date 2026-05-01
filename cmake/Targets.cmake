@@ -34,6 +34,7 @@ target_link_libraries(spv_vendor
         OpenGL::GL
         glfw
         glad
+        glm::glm
 )
 
 if(SPV_ENABLE_IMGUI)

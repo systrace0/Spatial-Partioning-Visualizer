@@ -1,5 +1,10 @@
 build/
-.vscode/
 .cache/
 .DS_Store
 compile_commands.json
+
+# VSCode — ignore personal/machine-specific files, track project config
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json

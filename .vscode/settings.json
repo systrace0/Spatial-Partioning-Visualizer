@@ -1,0 +1,56 @@
+{
+    "cmake.useCMakePresets": "always",
+    "cmake.configureOnOpen": true,
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildPreset}",
+
+    "cmake.options.advanced": {
+        "kit":             { "statusBarVisibility": "hidden" },
+        "variant":         { "statusBarVisibility": "hidden" },
+        "folder":          { "statusBarVisibility": "hidden" },
+        "configure":       { "statusBarVisibility": "hidden" },
+
+        "configurePreset": { "statusBarVisibility": "visible" },
+        "buildPreset":     { "statusBarVisibility": "hidden" },
+        "testPreset":      { "statusBarVisibility": "hidden" },
+        "packagePreset":   { "statusBarVisibility": "hidden" },
+        "workflowPreset":  { "statusBarVisibility": "hidden" },
+
+        "buildTarget":     { "statusBarVisibility": "hidden" },
+        "launchTarget":    { "statusBarVisibility": "hidden" },
+
+        "build":           { "statusBarVisibility": "visible" },
+        "launch":          { "statusBarVisibility": "visible" },
+        "debug":           { "statusBarVisibility": "hidden" },
+        "ctest":           { "statusBarVisibility": "hidden" },
+        "cpack":           { "statusBarVisibility": "hidden" },
+        "workflow":        { "statusBarVisibility": "hidden" }
+    },
+
+    "C_Cpp.intelliSenseEngine": "disabled",
+
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/build/${buildPreset}",
+        "--header-insertion=never",
+        "--function-arg-placeholders=0",
+        "--clang-tidy"
+    ],
+
+    "editor.formatOnSave": true,
+    "editor.inlayHints.enabled": "offUnlessPressed",
+
+    "output.smartScroll.enabled": false,
+
+    "cmake.showConfigureWithDebuggerNotification": false,
+
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[c]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    }
+}

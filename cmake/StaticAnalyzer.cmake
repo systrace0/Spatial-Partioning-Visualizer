@@ -1,4 +1,4 @@
-function(spv_enable_clang_tidy target)
+function(spv_enable_static_analyzers target)
     if(NOT SPV_ENABLE_CLANG_TIDY)
         return()
     endif()
