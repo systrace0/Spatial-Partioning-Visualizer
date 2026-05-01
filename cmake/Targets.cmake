@@ -35,12 +35,11 @@ target_link_libraries(spv_vendor
         glfw
         glad
         glm::glm
+        spdlog::spdlog_header_only
 )
 
-if(SPV_ENABLE_IMGUI)
-    target_link_libraries(spv_vendor
-        INTERFACE
-            imgui
-    )
-endif()
 
+target_link_libraries(spv_vendor
+    INTERFACE
+        imgui
+)
