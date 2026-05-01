@@ -1,5 +1,8 @@
 #include <iostream>
-#include <stdexcept>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -8,6 +11,17 @@ namespace
     void ErrorCallBack(int error, const char* description)
     {
         std::cerr << "GLFW Error [" << error << "]: " << description << '\n';
+    }
+
+    void frameBuffer_size_callback(GLFWwindow* window, int wdith, int height)
+    {
+        glViewport(0, 0, wdith, height);
+    }
+
+    void processInput(GLFWwindow* window)
+    {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, 1);
     }
 } // namespace
 
@@ -50,36 +64,59 @@ int main()
         return -1;
     }
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init();
+
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* renderer = glGetString(GL_VERSION);
-    const GLubyte* version = glGetString(GL_VERSION);
     const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-    int major{ 0 };
-    int minor{ 0 };
-    glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
-    glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
-
-    major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
-    minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
-
-    std::cout << "Vendor:        " << (vendor ? reinterpret_cast<const char*>(vendor) : "Unknown") << '\n';
-    std::cout << "Renderer:      " << (renderer ? reinterpret_cast<const char*>(renderer) : "Unknown")
-              << '\n';
-    std::cout << "OpenGL:        " << (version ? reinterpret_cast<const char*>(version) : "Unknown") << '\n';
-    std::cout << "GLSL:          " << (glslVersion ? reinterpret_cast<const char*>(glslVersion) : "Unknown")
-              << '\n';
-    std::cout << "Context:       " << major << '.' << minor << '\n';
+    int major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
+    int minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
 
     while (glfwWindowShouldClose(window) == 0)
     {
-        glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
+        glfwPollEvents();
+        glClearColor(0.08F, 0.08F, 0.10F, 1.0F);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        processInput(window);
+        glfwSetFramebufferSizeCallback(window, frameBuffer_size_callback);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+
+        // Window creation
+        ImGui::Begin("SPV - Debug Info");
+        ImGui::Text("Window: %d x %d", window_width, window_height);
+        ImGui::Text("Vendor: %s", vendor);
+        ImGui::Text("Renderer: %s", renderer);
+        ImGui::Text("GLSL: %s", glslVersion);
+        ImGui::Text("GL MAJOR: %d", major);
+        ImGui::Text("GL MINOR: %d", minor);
+        ImGui::End();
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
-        glfwPollEvents();
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
 
