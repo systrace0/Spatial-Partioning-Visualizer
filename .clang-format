@@ -12,3 +12,4 @@ PointerAlignment: Left
 ReferenceAlignment: Left
 SortIncludes: true
 NamespaceIndentation: All
+Cpp11BracedListStyle: false

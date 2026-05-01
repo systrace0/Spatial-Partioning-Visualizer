@@ -29,7 +29,7 @@
     "C_Cpp.intelliSenseEngine": "disabled",
 
     "clangd.arguments": [
-        "--compile-commands-dir=${workspaceFolder}/build/${buildPreset}",
+        "--compile-commands-dir=${workspaceFolder}/build/debug",
         "--header-insertion=never",
         "--function-arg-placeholders=0",
         "--clang-tidy"
