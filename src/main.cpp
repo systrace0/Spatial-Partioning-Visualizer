@@ -4,6 +4,8 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "spdlog/spdlog.h"
+
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 namespace
@@ -13,9 +15,9 @@ namespace
         std::cerr << "GLFW Error [" << error << "]: " << description << '\n';
     }
 
-    void frameBuffer_size_callback(GLFWwindow* window, int wdith, int height)
+    void frameBuffer_size_callback(GLFWwindow* window, int width, int height)
     {
-        glViewport(0, 0, wdith, height);
+        glViewport(0, 0, width, height);
     }
 
     void processInput(GLFWwindow* window)
@@ -34,7 +36,7 @@ int main()
 
     if (glfwInit() == 0)
     {
-        std::cerr << "Failed to initialize GLFW.\n";
+        SPDLOG_ERROR("Failed to initialize GLFW\n");
         return -1;
     }
 
@@ -49,17 +51,18 @@ int main()
         glfwCreateWindow(window_width, window_height, "Spatial Partitioning Visualizer", nullptr, nullptr);
     if (window == nullptr)
     {
-        std::cerr << "Failed to create GLFW window.\n";
+        SPDLOG_ERROR("Failed to create GLFW window.\n");
         glfwTerminate();
         return -1;
     }
+    spdlog::info("Window created");
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
     if (gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)) == 0)
     {
-        std::cerr << "Failed to initialize GLAD.\n";
+        SPDLOG_ERROR("Failed to initialize GLAD.\n");
         glfwDestroyWindow(window);
         return -1;
     }
@@ -73,6 +76,8 @@ int main()
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init();
+
+    spdlog::info("ImGui Initialized");
 
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* renderer = glGetString(GL_VERSION);
@@ -113,6 +118,8 @@ int main()
 
         glfwSwapBuffers(window);
     }
+
+    spdlog::info("Shutting down...");
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
