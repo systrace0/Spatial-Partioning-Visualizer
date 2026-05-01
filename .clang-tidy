@@ -1,12 +1,22 @@
 Checks: >
-  clang-analyzer-*,
+  -*,
   bugprone-*,
-  modernize-*,
   performance-*,
+  portability-*,
   readability-*,
+  modernize-*,
+  cppcoreguidelines-*,
+  clang-analyzer-*,
+  -readability-magic-numbers,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-braces-around-statements,
   -readability-identifier-length,
-  -modernize-use-trailing-return-type,
-  -cppcoreguidelines-avoid-magic-numbers
-WarningsAsErrors: ""
-HeaderFilterRegex: "^(src)/"
-FormatStyle: file
+  -cppcoreguidelines-pro-type-vararg
+
+WarningsAsErrors: >
+  bugprone-*,
+  clang-analyzer-*,
+  performance-*
+
+HeaderFilterRegex: '.*/src/.*'
+FormatStyle: none
