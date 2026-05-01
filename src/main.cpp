@@ -12,6 +12,17 @@ namespace
     {
         std::cerr << "GLFW Error [" << error << "]: " << description << '\n';
     }
+
+    void frameBuffer_size_callback(GLFWwindow* window, int wdith, int height)
+    {
+        glViewport(0, 0, wdith, height);
+    }
+
+    void processInput(GLFWwindow* window)
+    {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, 1);
+    }
 } // namespace
 
 int main()
@@ -65,24 +76,35 @@ int main()
 
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* renderer = glGetString(GL_VERSION);
-    const GLubyte* version = glGetString(GL_VERSION);
     const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-    int major{ 0 };
-    int minor{ 0 };
-
-    major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
-    minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
+    int major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
+    int minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
 
     while (glfwWindowShouldClose(window) == 0)
     {
         glfwPollEvents();
-        glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
+        glClearColor(0.08F, 0.08F, 0.10F, 1.0F);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        processInput(window);
+        glfwSetFramebufferSizeCallback(window, frameBuffer_size_callback);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
+
+        // Window creation
+        ImGui::Begin("SPV - Debug Info");
+        ImGui::Text("Window: %d x %d", window_width, window_height);
+        ImGui::Text("Vendor: %s", vendor);
+        ImGui::Text("Renderer: %s", renderer);
+        ImGui::Text("GLSL: %s", glslVersion);
+        ImGui::Text("GL MAJOR: %d", major);
+        ImGui::Text("GL MINOR: %d", minor);
+        ImGui::End();
 
         ImGui::ShowDemoWindow();
 
